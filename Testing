@@ -1,0 +1,89 @@
+package uwstout.cs144.projects.project2.account;
+
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+
+/**
+ * This class tests the AccountReport and Account class.
+ * 
+ * @author FlowersC
+ * @version 2016-11-21
+ */
+public class Testing {
+
+	/**
+	 * This method tests the AccountReport and Account class.
+	 * 
+	 * @param args
+	 *            command line parameters
+	 */
+	public static void main(String[] args) {
+		Transaction num1 = new Transaction(1234, "December 4th", 2.50);
+		System.out.println(num1.getId());
+		System.out.println(num1.getDate());
+		System.out.println(num1.getAmount());
+		Account acc1 = new Account(6969, true);
+		System.out.println(acc1.getAccountId());
+		System.out.println(acc1.isSavings());
+		System.out.println(acc1.isChecking());
+		acc1.addTransaction(1234, "2018-11-12", 2.50);
+		System.out.println(acc1.getTransactionCount());
+		System.out.println(acc1.getTransaction(0));
+		System.out.println(" ");
+
+		acc1.addTransaction(5678, "2017-11-12", 911.00);
+		System.out.println(acc1.getTransaction(0));
+		System.out.println(acc1.getTransaction(1));
+		System.out.println(acc1.getTransactionCount());
+		System.out.println(" ");
+
+		System.out.println(acc1.findTransaction(1234));
+		System.out.println(" ");
+
+		System.out.println(acc1.getBalance());
+		System.out.println(acc1.getFee());
+		acc1.addTransaction(6234, "2016-11-12", -911.00);
+		acc1.addTransaction(4123, "2015-11-12", -2.50);
+		acc1.addTransaction(947283, "2014-11-12", -0.50);
+		acc1.addTransaction(321445234, "2013-11-12", -0.50);
+		acc1.addTransaction(123123, "2012-11-12", -0.00);
+		acc1.addTransaction(8374, "2011-11-12", -0.00);
+		acc1.addTransaction(555, "2010-11-12", -0.00);
+		acc1.addTransaction(4763, "2009-11-12", -0.00);
+		acc1.addTransaction(9101112, "2008-11-12", -0.00);
+		System.out.println(acc1.getTransactionCount());
+		System.out.println(acc1.getTransaction(9).getId());
+		System.out.println(acc1.getTransaction(10).getId());
+		System.out.println(acc1.getFee());
+		System.out.println(acc1.getBalance());
+		System.out.println(" ");
+
+		AccountReport test1 = new AccountReport();
+		test1.readAccount("accountSmall.txt");
+
+		try {
+			PrintWriter out = new PrintWriter("newSmallReport.txt");
+			test1.printReport(out);
+			out.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		AccountReport test2 = new AccountReport();
+		test2.readAccount("accountLarge.txt");
+
+		try {
+			PrintWriter out2 = new PrintWriter("newLargeReport.txt");
+			test2.printReport(out2);
+			out2.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		//AccountReport test3 = new AccountReport();
+		//test3.printReport("accountSmall.txt");
+		
+
+	}
+
+}
