@@ -1,0 +1,183 @@
+package uwstout.cs144.projects.project2.account;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.*;
+import java.text.NumberFormat;
+
+/**
+ * This class will read in account information and write an account report.
+ * 
+ * @author FlowersC
+ * @version 2016-11-20
+ */
+public class AccountReport {
+	// the amounts formated in currency
+	// the negative amounts displayed in ()'s and no negative sign
+	// use NumberFormat's currency formatter since it does it for you
+
+	/**
+	 * This is an account object.
+	 */
+	private Account account;
+
+	/**
+	 * this constructor sets the account object to null.
+	 */
+	public AccountReport() {
+		account = null;
+	}
+
+	/**
+	 * This getter gets the account.
+	 * 
+	 * @return the account
+	 */
+	public Account getAccount() {
+		return account;
+	}
+
+	/**
+	 * This method reads an account with a Scanner.
+	 * 
+	 * @param input
+	 *            the Scanner that the user uses
+	 */
+	public void readAccount(Scanner input) {
+		Account burg;
+		int theId;
+		boolean theAccount;
+		int theTransId;
+		String theDate;
+		double theAmount;
+		
+		try {
+			if (input.hasNextInt()) {
+				theId = input.nextInt();
+				if (input.hasNextBoolean()) {
+					theAccount = input.nextBoolean();
+
+					burg = new Account(theId, theAccount);
+					try {
+						while (input.hasNext()) {
+							if (input.hasNextInt()) {
+								theTransId = input.nextInt();
+								if (input.hasNext()) {
+									theDate = input.next();
+									if (input.hasNextDouble()) {
+										theAmount = input.nextDouble();
+
+										burg.addTransaction(theTransId,
+												theDate, theAmount);
+										account = burg;
+									}
+								}
+							}
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * This method reads a file given by the user.
+	 * 
+	 * @param fileName
+	 *            the fileName the user is trying to read
+	 */
+	public void readAccount(String fileName) {
+		// open the file
+		File file = new File(fileName);
+		try {
+			Scanner read = new Scanner(file);
+			// loop over all the data
+			if (read.hasNext()) {
+				readAccount(read);
+			}
+
+			// close the file
+			read.close();
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * This method prints the report by using a PrintWriter given by the user.
+	 * 
+	 * @param writer
+	 *            the PrintWriter that the user creates to use this
+	 */
+	public void printReport(PrintWriter writer) {
+		// add account id
+		// add either savings or checking
+		// add the fee if it is more than zero
+		NumberFormat defaultFormat = NumberFormat.getCurrencyInstance();
+		if (account != null) {
+			writer.println(account.getAccountId());
+			if (account.isChecking()) {
+				writer.println("Checking");
+			} else {
+				writer.println("Savings");
+			}
+			for (int i = 0; i < account.getTransactionCount(); i++) {
+				Transaction burg = account.getTransaction(i);
+				writer.println(burg.getDate() + " " +
+						defaultFormat.format(burg.getAmount()) + " \n");
+			}
+			writer.println("Balance: " 
+					+ defaultFormat.format(account.getBalance()));
+			if (account.getFee() > 0) {
+				writer.println("Fee: " 
+						+ defaultFormat.format(account.getFee()));
+			}
+		}
+	}
+
+	/**
+	 * This method reads a fileName from the user and prints to a new file.
+	 * 
+	 * @param fileName
+	 *            the file the user is trying to read
+	 */
+	public void printReport(String fileName) {
+		File file = new File(fileName);
+		NumberFormat defaultFormat = NumberFormat.getCurrencyInstance();
+		readAccount("" + file);
+		try {
+			PrintWriter p = new PrintWriter(fileName);
+			if (account != null) {
+				p.println(account.getAccountId());
+				if (account.isChecking()) {
+					p.println("Checking");
+				} else {
+					p.println("Savings");
+				}
+				for (int i = 0; i < account.getTransactionCount(); i++) {
+					Transaction burg = account.getTransaction(i);
+					p.println(burg.getDate() + " " +
+							defaultFormat.format(burg.getAmount()) + " \n");
+				}
+				p.println("Balance: " 
+						+ defaultFormat.format(account.getBalance()));
+				if (account.getFee() > 0) {
+					p.println("Fee: " + defaultFormat.format(account.getFee()));
+				}
+				p.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+}
