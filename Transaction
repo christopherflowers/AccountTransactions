@@ -1,0 +1,66 @@
+package uwstout.cs144.projects.project2.account;
+
+/**
+ * This class will represent one transaction on an account and when it occurred.
+ * 
+ * @author FlowersC
+ * @version 2016-11-19
+ */
+public class Transaction {
+	/**
+	 * The id of the transaction.
+	 */
+	private int id;
+	/**
+	 * The date of the transaction.
+	 */
+	private String date;
+	/**
+	 * The amount of the transaction.
+	 */
+	private double amount;
+
+	/**
+	 * This constructor creates a new transaction.
+	 * 
+	 * @param nId
+	 *            the id of the transaction
+	 * @param nDate
+	 *            the date of the transaction
+	 * @param nAmount
+	 *            the amount of the transaction
+	 */
+	public Transaction(int nId, String nDate, double nAmount) {
+		id = nId;
+		date = nDate;
+		amount = nAmount;
+	}
+
+	/**
+	 * This getter gets the id of the transaction.
+	 * 
+	 * @return the id of the transaction
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * This getter gets the date of the transaction.
+	 * 
+	 * @return the date of the transaction
+	 */
+	public String getDate() {
+		return date;
+	}
+
+	/**
+	 * This getter gets the amount of the transaction.
+	 * 
+	 * @return the amount of the transaction
+	 */
+	public double getAmount() {
+		return amount;
+	}
+
+}
