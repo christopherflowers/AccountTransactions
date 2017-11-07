@@ -1,0 +1,179 @@
+package uwstout.cs144.projects.project2.account;
+
+/**
+ * This class represents an account and all it's transactions.
+ * 
+ * @author FlowersC
+ * @version 2016-11-20
+ */
+public class Account {
+
+	/**
+	 * This is the id of the account.
+	 */
+	private int accountId;
+	/**
+	 * This is the type of the account, either checking or savings.
+	 */
+	private boolean accountType;
+	/**
+	 * This is an array of Transactions for the account.
+	 */
+	private Transaction[] transactions;
+	/**
+	 * This is the number of transactions the account has.
+	 */
+	private int transCount;
+
+	/**
+	 * This constructor creates a new account.
+	 * 
+	 * @param nAccountId
+	 *            this is the id of the account
+	 * @param nAccountType
+	 *            this is the account type; true for savings, false for checking
+	 */
+	public Account(int nAccountId, boolean nAccountType) {
+		accountType = nAccountType; // True = savings, false = checking
+		accountId = nAccountId;
+		transactions = new Transaction[10];
+		transCount = 0;
+	}
+
+	/**
+	 * This getter gets the account id.
+	 * 
+	 * @return the account id
+	 */
+	public int getAccountId() {
+		return accountId;
+	}
+
+	/**
+	 * This method tells if the account is savings or not.
+	 * 
+	 * @return the result of the account type
+	 */
+	public boolean isSavings() {
+		return accountType;
+	}
+
+	/**
+	 * This method tells if the account is checking or not.
+	 * 
+	 * @return the result
+	 */
+	public boolean isChecking() {
+		return !accountType;
+	}
+
+	/**
+	 * This private method updates the length of the array.
+	 * 
+	 * @return the new updated array
+	 */
+	private void updateArray() { 
+		int x = transCount;
+		Transaction[] newTransactions = new Transaction[(x * 2)];
+		for (int i = 0; i < transCount; i++) {
+			newTransactions[i] = transactions[i];
+		}
+		transactions = newTransactions;
+	}
+
+	/**
+	 * This method adds a transaction to the array of transactions.
+	 * 
+	 * @param transId
+	 *            the transaction id
+	 * @param transDate
+	 *            the transaction date
+	 * @param nAmount
+	 *            the amount of the transaction
+	 */
+	public void addTransaction(int transId, String transDate, double nAmount) {
+		if (transDate != null && transId > 0) {
+			Transaction newTrans = new Transaction(transId, transDate, nAmount);
+			if (transCount == transactions.length) {
+				updateArray();
+
+				transactions[transCount] = newTrans;
+			} else {
+				transactions[transCount] = newTrans;
+			}
+
+			transCount++;
+		}
+	}
+
+	/**
+	 * This method gets a transaction at a specific position.
+	 * 
+	 * @param pos
+	 *            the position of the transaction in the array
+	 * @return the Transaction at a specific position
+	 */
+	public Transaction getTransaction(int pos) {
+		if (pos >= 0 && pos < transCount) {
+			return transactions[pos];
+		}
+		return null;
+	}
+
+	/**
+	 * This method gets the number of transactions in the account.
+	 * 
+	 * @return the number of transactions in the account
+	 */
+	public int getTransactionCount() {
+		return transCount;
+	}
+
+	/**
+	 * This method gets the balance of the account.
+	 * 
+	 * @return the balance of the account
+	 */
+	public double getBalance() {
+		double balance = 0;
+		for (int i = 0; i < transCount; i++) {
+			balance += transactions[i].getAmount();
+		}
+
+		return balance;
+	}
+
+	/**
+	 * This method gets the fee if the account has a negative balance.
+	 * 
+	 * @return the fee if any on the account
+	 */
+	public double getFee() {
+		double fee = 0;
+		if (getBalance() >= 0) {
+			return fee;
+		} else {
+			if ((Math.abs(getBalance()) * 0.15) < 15.00) {
+				return 15.00;
+			} else {
+				return Math.abs(getBalance()) * 0.15;
+			}
+		}
+	}
+
+	/**
+	 * This method finds a transaction with a specific id.
+	 * 
+	 * @param nTransId
+	 *            the transaction id you are trying to find
+	 * @return a Transaction with a specific id
+	 */
+	public Transaction findTransaction(int nTransId) {
+		for (int i = 0; i < transCount; i++) {
+			if (transactions[i].getId() == nTransId) {
+				return transactions[i];
+			}
+		}
+		return null;
+	}
+}
